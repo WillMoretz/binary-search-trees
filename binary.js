@@ -21,16 +21,16 @@ const binaryTree = (array) => {
   function buildTree(input) {
     const arr = sanitizeArray(input);
 
-    function recur(arr, start, end) {
+    function recur(start, end) {
       if (start > end) return null;
       const middle = Math.floor((start + end) / 2);
       const treeNode = node(arr[middle]);
-      treeNode.setLeft(recur(arr, start, middle - 1));
-      treeNode.setRight(recur(arr, middle + 1, end));
+      treeNode.setLeft(recur(start, middle - 1));
+      treeNode.setRight(recur(middle + 1, end));
       return treeNode;
     }
 
-    return recur(arr, 0, arr.length - 1);
+    return recur(0, arr.length - 1);
   }
 
   let baseNode = buildTree(array);
