@@ -34,9 +34,16 @@ const binaryTree = (array) => {
   }
 
   let baseNode = buildTree(array);
-  console.log(baseNode);
 
-  const prettyPrint = (treeNode, prefix = "", isLeft = true) => {
+  function insert(newNode, currentNode = baseNode) {
+    if (newNode.value < currentNode.value) {
+      if (currentNode.left === null) currentNode.setLeft(newNode);
+      else insert(newNode, currentNode.left);
+    } else if (currentNode.right === null) currentNode.setRight(newNode);
+    else insert(newNode, currentNode.right);
+  }
+
+  const prettyPrint = (treeNode = baseNode, prefix = "", isLeft = true) => {
     if (treeNode === null) {
       return;
     }
@@ -53,8 +60,9 @@ const binaryTree = (array) => {
     }
   };
 
-  return { buildTree, prettyPrint, baseNode };
+  return { buildTree, prettyPrint, insert, baseNode };
 };
 
 const tree = binaryTree([1, 2, 5, 6, 4, 8, 0, 9]);
-tree.prettyPrint(tree.baseNode);
+tree.insert(node(-1));
+tree.prettyPrint();
