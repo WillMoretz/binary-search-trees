@@ -144,9 +144,22 @@ const binaryTree = (array) => {
     return find(value, currentNode.right);
   }
 
-  return { buildTree, prettyPrint, insert, remove, find };
+  function levelOrder(callback) {
+    const queue = [baseNode];
+    while (queue.length > 0) {
+      const currentNode = queue.shift();
+      if (currentNode.left !== null) queue.push(currentNode.left);
+      if (currentNode.right !== null) queue.push(currentNode.right);
+      callback(currentNode);
+    }
+  }
+
+  return { buildTree, prettyPrint, insert, remove, find, levelOrder };
 };
 
 const tree = binaryTree([1, 2, 5, 6, 4, 8, 0, 9]);
 tree.insert(node(-1));
 tree.prettyPrint(tree.find(4));
+const array = [];
+tree.levelOrder((treeNode) => array.push(treeNode.value));
+console.log(array);
