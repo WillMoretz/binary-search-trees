@@ -224,6 +224,20 @@ const binaryTree = (array) => {
     if (callback === undefined) return defaultResult;
   }
 
+  function height(startNode) {
+    if (startNode === undefined) return undefined;
+    if (baseNode === null) return 0;
+    let tallestHeight = 0;
+
+    function recur(currentNode, h) {
+      if (currentNode.left !== null) recur(currentNode.left, h + 1);
+      if (currentNode.right !== null) recur(currentNode.right, h + 1);
+      if (h > tallestHeight) tallestHeight = h;
+    }
+    recur(startNode, 0);
+    return tallestHeight;
+  }
+
   function depth(targetNode) {
     if (targetNode === undefined) return undefined;
     if (baseNode === null) return 0;
@@ -248,6 +262,7 @@ const binaryTree = (array) => {
     preOrder,
     inOrder,
     postOrder,
+    height,
     depth,
   };
 };
@@ -255,4 +270,4 @@ const binaryTree = (array) => {
 const tree = binaryTree([1, 2, 5, 6, 4, 8, 0, 9]);
 tree.insert(-1);
 tree.prettyPrint(tree.find(4));
-console.log(tree.depth(tree.find(9)));
+console.log(tree.height(tree.find(8)));
