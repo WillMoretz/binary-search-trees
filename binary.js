@@ -32,7 +32,6 @@ const binaryTree = (array) => {
       treeNode.setRight(recur(middle + 1, end));
       return treeNode;
     }
-
     return recur(0, arr.length - 1);
   }
 
@@ -144,35 +143,76 @@ const binaryTree = (array) => {
     return find(value, currentNode.right);
   }
 
+  // eslint-disable-next-line consistent-return
   function levelOrder(callback) {
+    const defaultResult = [];
     const queue = [baseNode];
     while (queue.length > 0) {
       const currentNode = queue.shift();
       if (currentNode.left !== null) queue.push(currentNode.left);
       if (currentNode.right !== null) queue.push(currentNode.right);
-      callback(currentNode);
+      // eslint-disable-next-line no-unused-expressions
+      if (callback === undefined) defaultResult.push(currentNode.value);
+      else callback(currentNode);
     }
+    if (callback === undefined) return defaultResult;
   }
 
-  function preOrder(callback, currentNode = baseNode) {
-    if (currentNode === null) return;
-    callback(currentNode);
-    preOrder(callback, currentNode.left);
-    preOrder(callback, currentNode.right);
+  function preOrder(callback) {
+    if (baseNode === null) return;
+    const defaultResult = [];
+    let newCallback;
+    if (callback === undefined)
+      newCallback = (treeNode) => defaultResult.push(treeNode.value);
+    else newCallback = callback;
+
+    function recur(cb, currentNode) {
+      if (currentNode === null) return;
+      cb(currentNode);
+      recur(cb, currentNode.left);
+      recur(cb, currentNode.right);
+    }
+    recur(newCallback, baseNode);
+    // eslint-disable-next-line consistent-return
+    if (callback === undefined) return defaultResult;
   }
 
-  function inOrder(callback, currentNode = baseNode) {
-    if (currentNode === null) return;
-    inOrder(callback, currentNode.left);
-    callback(currentNode);
-    inOrder(callback, currentNode.right);
+  function inOrder(callback) {
+    if (baseNode === null) return;
+    const defaultResult = [];
+    let newCallback;
+    if (callback === undefined)
+      newCallback = (treeNode) => defaultResult.push(treeNode.value);
+    else newCallback = callback;
+
+    function recur(cb, currentNode) {
+      if (currentNode === null) return;
+      recur(cb, currentNode.left);
+      cb(currentNode);
+      recur(cb, currentNode.right);
+    }
+    recur(newCallback, baseNode);
+    // eslint-disable-next-line consistent-return
+    if (callback === undefined) return defaultResult;
   }
 
-  function postOrder(callback, currentNode = baseNode) {
-    if (currentNode === null) return;
-    postOrder(callback, currentNode.left);
-    postOrder(callback, currentNode.right);
-    callback(currentNode);
+  function postOrder(callback) {
+    if (baseNode === null) return;
+    const defaultResult = [];
+    let newCallback;
+    if (callback === undefined)
+      newCallback = (treeNode) => defaultResult.push(treeNode.value);
+    else newCallback = callback;
+
+    function recur(cb, currentNode) {
+      if (currentNode === null) return;
+      recur(cb, currentNode.left);
+      recur(cb, currentNode.right);
+      cb(currentNode);
+    }
+    recur(newCallback, baseNode);
+    // eslint-disable-next-line consistent-return
+    if (callback === undefined) return defaultResult;
   }
 
   return {
@@ -191,6 +231,4 @@ const binaryTree = (array) => {
 const tree = binaryTree([1, 2, 5, 6, 4, 8, 0, 9]);
 tree.insert(node(-1));
 tree.prettyPrint(tree.find(4));
-const array = [];
-tree.inOrder((treeNode) => array.push(treeNode.value));
-console.log(array);
+console.log(tree.levelOrder());
