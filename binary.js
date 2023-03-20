@@ -298,12 +298,33 @@ const binaryTree = (array) => {
   };
 };
 
-const tree = binaryTree([1, 2, 5, 6, 4, 8, 0, 9]);
-tree.insert(-1);
-tree.prettyPrintEntire();
-console.log(tree.isBalanced());
-tree.insert(100);
-tree.prettyPrintEntire();
-console.log(tree.isBalanced());
-tree.rebalance();
-tree.prettyPrintEntire();
+function testRandomTree() {
+  const randomArray = [];
+  while (randomArray.length < 10) {
+    const randomInt = Math.floor(Math.random() * 100);
+    if (!randomArray.includes(randomInt)) randomArray.push(randomInt);
+  }
+  const tree = binaryTree(randomArray);
+  tree.prettyPrintEntire();
+  console.log(`Tree balanced: ${tree.isBalanced()}`);
+  console.log(`Level Order: ${tree.levelOrder()}`);
+  console.log(`Pre-Order: ${tree.preOrder()}`);
+  console.log(`In-Order: ${tree.inOrder()}`);
+  console.log(`Post-Order: ${tree.postOrder()}`);
+  tree.insert(200);
+  tree.insert(300);
+  tree.insert(400);
+  console.log("Inserted values 200, 300, and 400");
+  tree.prettyPrintEntire();
+  console.log(`Tree balanced: ${tree.isBalanced()}`);
+  console.log("Rebalancing tree....");
+  tree.rebalance();
+  tree.prettyPrintEntire();
+  console.log(`Tree balanced: ${tree.isBalanced()}`);
+  console.log(`Level Order: ${tree.levelOrder()}`);
+  console.log(`Pre-Order: ${tree.preOrder()}`);
+  console.log(`In-Order: ${tree.inOrder()}`);
+  console.log(`Post-Order: ${tree.postOrder()}`);
+}
+
+testRandomTree();
