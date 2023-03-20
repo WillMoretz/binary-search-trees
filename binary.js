@@ -55,6 +55,10 @@ const binaryTree = (array) => {
     }
   };
 
+  function prettyPrintEntire() {
+    prettyPrint(baseNode);
+  }
+
   function insert(value, currentNode = baseNode) {
     if (baseNode === null) {
       baseNode = node(value);
@@ -270,9 +274,16 @@ const binaryTree = (array) => {
     return balanced;
   }
 
+  function rebalance() {
+    const newArray = inOrder();
+    baseNode = buildTree(newArray);
+    return baseNode;
+  }
+
   return {
     buildTree,
     prettyPrint,
+    prettyPrintEntire,
     insert,
     remove,
     find,
@@ -283,13 +294,16 @@ const binaryTree = (array) => {
     height,
     depth,
     isBalanced,
+    rebalance,
   };
 };
 
 const tree = binaryTree([1, 2, 5, 6, 4, 8, 0, 9]);
 tree.insert(-1);
-tree.prettyPrint(tree.find(4));
+tree.prettyPrintEntire();
 console.log(tree.isBalanced());
 tree.insert(100);
-tree.prettyPrint(tree.find(4));
+tree.prettyPrintEntire();
 console.log(tree.isBalanced());
+tree.rebalance();
+tree.prettyPrintEntire();
