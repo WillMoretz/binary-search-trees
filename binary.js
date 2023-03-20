@@ -224,7 +224,7 @@ const binaryTree = (array) => {
     if (callback === undefined) return defaultResult;
   }
 
-  function height(targetNode) {
+  function depth(targetNode) {
     if (targetNode === undefined) return undefined;
     if (baseNode === null) return 0;
     let i = 0;
@@ -248,11 +248,11 @@ const binaryTree = (array) => {
     preOrder,
     inOrder,
     postOrder,
-    height,
+    depth,
   };
 };
 
 const tree = binaryTree([1, 2, 5, 6, 4, 8, 0, 9]);
 tree.insert(-1);
 tree.prettyPrint(tree.find(4));
-console.log(tree.height(tree.find(9)));
+console.log(tree.depth(tree.find(9)));
