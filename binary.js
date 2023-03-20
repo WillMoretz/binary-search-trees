@@ -22,6 +22,7 @@ const binaryTree = (array) => {
   }
 
   function buildTree(input) {
+    if (input === null) return null;
     const arr = sanitizeArray(input);
 
     function recur(start, end) {
@@ -38,7 +39,7 @@ const binaryTree = (array) => {
   let baseNode = buildTree(array);
 
   const prettyPrint = (treeNode, prefix = "", isLeft = true) => {
-    if (treeNode === null) {
+    if (treeNode === null || treeNode === undefined) {
       return;
     }
     if (treeNode.right !== null) {
@@ -55,6 +56,11 @@ const binaryTree = (array) => {
   };
 
   function insert(newNode, currentNode = baseNode) {
+    if (baseNode === null) {
+      baseNode = newNode;
+      return;
+    }
+
     if (newNode.value < currentNode.value) {
       if (currentNode.left === null) currentNode.setLeft(newNode);
       else insert(newNode, currentNode.left);
@@ -68,6 +74,7 @@ const binaryTree = (array) => {
     prevNode = null,
     direction = ""
   ) {
+    if (baseNode === null) return null;
     if (value < currentNode.value) {
       return remove(value, currentNode.left, currentNode, "left");
     }
@@ -136,6 +143,8 @@ const binaryTree = (array) => {
   }
 
   function find(value, currentNode = baseNode) {
+    if (baseNode === null) return undefined;
+
     if (currentNode.value === value) return currentNode;
     if (currentNode.right === null && currentNode.left === null)
       return undefined;
@@ -231,4 +240,3 @@ const binaryTree = (array) => {
 const tree = binaryTree([1, 2, 5, 6, 4, 8, 0, 9]);
 tree.insert(node(-1));
 tree.prettyPrint(tree.find(4));
-console.log(tree.levelOrder());
