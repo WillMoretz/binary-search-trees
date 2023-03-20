@@ -226,7 +226,7 @@ const binaryTree = (array) => {
 
   function height(startNode) {
     if (startNode === undefined) return undefined;
-    if (baseNode === null) return 0;
+    if (baseNode === null || startNode === null) return 0;
     let tallestHeight = 0;
 
     function recur(currentNode, h) {
@@ -240,7 +240,7 @@ const binaryTree = (array) => {
 
   function depth(targetNode) {
     if (targetNode === undefined) return undefined;
-    if (baseNode === null) return 0;
+    if (baseNode === null || targetNode === null) return 0;
     let i = 0;
     function recur(currentNode) {
       if (currentNode === null) return undefined;
@@ -250,6 +250,24 @@ const binaryTree = (array) => {
       return recur(currentNode.right);
     }
     return recur(baseNode);
+  }
+
+  function isBalanced() {
+    if (baseNode === null) return true;
+    let balanced = true;
+
+    function recur(currentNode) {
+      if (currentNode === null) return;
+      if (currentNode.left === null && currentNode.right === null) return;
+      if (Math.abs(height(currentNode.left) - height(currentNode.right)) >= 2) {
+        balanced = false;
+        return;
+      }
+      recur(currentNode.left);
+      recur(currentNode.right);
+    }
+    recur(baseNode);
+    return balanced;
   }
 
   return {
@@ -264,10 +282,14 @@ const binaryTree = (array) => {
     postOrder,
     height,
     depth,
+    isBalanced,
   };
 };
 
 const tree = binaryTree([1, 2, 5, 6, 4, 8, 0, 9]);
 tree.insert(-1);
 tree.prettyPrint(tree.find(4));
-console.log(tree.height(tree.find(8)));
+console.log(tree.isBalanced());
+tree.insert(100);
+tree.prettyPrint(tree.find(4));
+console.log(tree.isBalanced());
