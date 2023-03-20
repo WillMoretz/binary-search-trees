@@ -4,6 +4,9 @@ const node = (data) => ({
   value: data,
   left: null,
   right: null,
+  setValue(newValue) {
+    this.value = newValue;
+  },
   setLeft(newleft) {
     this.left = newleft;
   },
@@ -35,14 +38,6 @@ const binaryTree = (array) => {
 
   let baseNode = buildTree(array);
 
-  function insert(newNode, currentNode = baseNode) {
-    if (newNode.value < currentNode.value) {
-      if (currentNode.left === null) currentNode.setLeft(newNode);
-      else insert(newNode, currentNode.left);
-    } else if (currentNode.right === null) currentNode.setRight(newNode);
-    else insert(newNode, currentNode.right);
-  }
-
   const prettyPrint = (treeNode = baseNode, prefix = "", isLeft = true) => {
     if (treeNode === null) {
       return;
@@ -60,9 +55,92 @@ const binaryTree = (array) => {
     }
   };
 
-  return { buildTree, prettyPrint, insert, baseNode };
+  function insert(newNode, currentNode = baseNode) {
+    if (newNode.value < currentNode.value) {
+      if (currentNode.left === null) currentNode.setLeft(newNode);
+      else insert(newNode, currentNode.left);
+    } else if (currentNode.right === null) currentNode.setRight(newNode);
+    else insert(newNode, currentNode.right);
+  }
+
+  function remove(
+    value,
+    currentNode = baseNode,
+    prevNode = null,
+    direction = ""
+  ) {
+    if (value < currentNode.value) {
+      return remove(value, currentNode.left, currentNode, "left");
+    }
+    if (value > currentNode.value) {
+      return remove(value, currentNode.right, currentNode, "right");
+    }
+    // Remove Leaf Node
+    if (currentNode.left === null && currentNode.right === null) {
+      if (direction === "left") {
+        prevNode.setLeft(null);
+        return currentNode;
+      }
+      if (direction === "right") {
+        prevNode.setRight(null);
+        return currentNode;
+      }
+      baseNode = null;
+      return null;
+    }
+    // Remove Left Branch Node
+    if (currentNode.left !== null && currentNode.right === null) {
+      if (direction === "left") {
+        prevNode.setLeft(currentNode.left);
+        return currentNode;
+      }
+      if (direction === "right") {
+        prevNode.setRight(currentNode.left);
+        return currentNode;
+      }
+    }
+    // Remove Right Branch Node
+    if (currentNode.left === null && currentNode.right !== null) {
+      if (direction === "left") {
+        prevNode.setLeft(currentNode.right);
+        return currentNode;
+      }
+      if (direction === "right") {
+        prevNode.setRight(currentNode.right);
+        return currentNode;
+      }
+    }
+    // Remove Left and Right Branch Node
+    function replaceNode(replacementNode, parentNode) {
+      let rNode = replacementNode;
+      let pNode = parentNode;
+      while (rNode.left !== null) {
+        pNode = rNode;
+        rNode = rNode.left;
+      }
+      if (rNode.right === null) {
+        if (pNode.right === rNode) {
+          pNode.setRight(null);
+        } else {
+          pNode.setLeft(null);
+        }
+      } else if (pNode.right === rNode) {
+        pNode.setRight(rNode.right);
+      } else {
+        pNode.setLeft(rNode.right);
+      }
+
+      currentNode.setValue(rNode.value);
+      return rNode;
+    }
+    return replaceNode(currentNode.right, currentNode);
+  }
+
+  return { buildTree, prettyPrint, insert, remove };
 };
 
 const tree = binaryTree([1, 2, 5, 6, 4, 8, 0, 9]);
 tree.insert(node(-1));
+tree.prettyPrint();
+tree.remove(4);
 tree.prettyPrint();
