@@ -154,12 +154,43 @@ const binaryTree = (array) => {
     }
   }
 
-  return { buildTree, prettyPrint, insert, remove, find, levelOrder };
+  function preOrder(callback, currentNode = baseNode) {
+    if (currentNode === null) return;
+    callback(currentNode);
+    preOrder(callback, currentNode.left);
+    preOrder(callback, currentNode.right);
+  }
+
+  function inOrder(callback, currentNode = baseNode) {
+    if (currentNode === null) return;
+    inOrder(callback, currentNode.left);
+    callback(currentNode);
+    inOrder(callback, currentNode.right);
+  }
+
+  function postOrder(callback, currentNode = baseNode) {
+    if (currentNode === null) return;
+    postOrder(callback, currentNode.left);
+    postOrder(callback, currentNode.right);
+    callback(currentNode);
+  }
+
+  return {
+    buildTree,
+    prettyPrint,
+    insert,
+    remove,
+    find,
+    levelOrder,
+    preOrder,
+    inOrder,
+    postOrder,
+  };
 };
 
 const tree = binaryTree([1, 2, 5, 6, 4, 8, 0, 9]);
 tree.insert(node(-1));
 tree.prettyPrint(tree.find(4));
 const array = [];
-tree.levelOrder((treeNode) => array.push(treeNode.value));
+tree.inOrder((treeNode) => array.push(treeNode.value));
 console.log(array);
