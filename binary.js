@@ -38,7 +38,7 @@ const binaryTree = (array) => {
 
   let baseNode = buildTree(array);
 
-  const prettyPrint = (treeNode = baseNode, prefix = "", isLeft = true) => {
+  const prettyPrint = (treeNode, prefix = "", isLeft = true) => {
     if (treeNode === null) {
       return;
     }
@@ -136,11 +136,17 @@ const binaryTree = (array) => {
     return replaceNode(currentNode.right, currentNode);
   }
 
-  return { buildTree, prettyPrint, insert, remove };
+  function find(value, currentNode = baseNode) {
+    if (currentNode.value === value) return currentNode;
+    if (currentNode.right === null && currentNode.left === null)
+      return undefined;
+    if (value < currentNode.value) return find(value, currentNode.left);
+    return find(value, currentNode.right);
+  }
+
+  return { buildTree, prettyPrint, insert, remove, find };
 };
 
 const tree = binaryTree([1, 2, 5, 6, 4, 8, 0, 9]);
 tree.insert(node(-1));
-tree.prettyPrint();
-tree.remove(4);
-tree.prettyPrint();
+tree.prettyPrint(tree.find(4));
